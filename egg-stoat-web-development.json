@@ -1,0 +1,152 @@
+{
+  "_comment": "DO NOT EDIT: FILE GENERATED FOR PTERODACTYL PANEL",
+  "meta": {
+    "version": "PTDL_v2",
+    "update_url": null
+  },
+  "exported_at": "2026-08-11T18:00:00-03:00",
+  "name": "Stoat Web Development",
+  "author": "jhonatas48",
+  "description": "Frontend oficial Stoat for-web em Solid.js/Vite, com modo development, hot reload e build preview. Compatível com ARM64 e AMD64.",
+  "features": null,
+  "docker_images": {
+    "Stoat Web Development": "ghcr.io/jhonatas48/stoat-web-pterodactyl:latest"
+  },
+  "file_denylist": [],
+  "startup": "bash /home/container/scripts/start.sh",
+  "config": {
+    "files": "{}",
+    "startup": "{\"done\": \"[stoat-web] Vite pronto na porta\"}",
+    "logs": "{}",
+    "stop": "^C"
+  },
+  "scripts": {
+    "installation": {
+      "script": "#!/bin/bash\nset -e\ncd /mnt/server\nmkdir -p scripts .cache .pnpm-store\ncp -R /opt/stoat-web-template/scripts/. scripts/\nchmod +x scripts/*.sh\nif [ -d source/.git ]; then\n  git -C source fetch origin \"${GIT_BRANCH}\"\n  git -C source checkout \"${GIT_BRANCH}\"\n  git -C source merge --ff-only \"origin/${GIT_BRANCH}\"\nelse\n  rm -rf source\n  git clone --depth 1 --branch \"${GIT_BRANCH}\" \"${GIT_REPOSITORY}\" source\nfi\ngit -C source submodule sync --recursive\ngit -C source submodule update --init --recursive packages/stoat.js packages/solid-livekit-components\necho 'Instalação concluída. Dependências serão preparadas no primeiro início.'\n",
+      "container": "ghcr.io/jhonatas48/stoat-web-pterodactyl:latest",
+      "entrypoint": "bash"
+    }
+  },
+  "variables": [
+    {
+      "name": "Repositório Git",
+      "description": "Fork do stoatchat/for-web.",
+      "env_variable": "GIT_REPOSITORY",
+      "default_value": "https://github.com/stoatchat/for-web.git",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|max:255",
+      "field_type": "text"
+    },
+    {
+      "name": "Branch Git",
+      "description": "Branch do frontend que será utilizada.",
+      "env_variable": "GIT_BRANCH",
+      "default_value": "main",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|max:100",
+      "field_type": "text"
+    },
+    {
+      "name": "Modo",
+      "description": "development habilita Vite/HMR; preview testa o build final.",
+      "env_variable": "APP_MODE",
+      "default_value": "development",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|in:development,preview",
+      "field_type": "text"
+    },
+    {
+      "name": "Host da instância",
+      "description": "Host do frontend sem protocolo, incluindo porta quando necessário.",
+      "env_variable": "INSTANCE_HOST",
+      "default_value": "127.0.0.1:14701",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|max:255",
+      "field_type": "text"
+    },
+    {
+      "name": "URL da API",
+      "description": "URL pública do Delta/API.",
+      "env_variable": "API_URL",
+      "default_value": "http://127.0.0.1:14702",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|url|max:255",
+      "field_type": "text"
+    },
+    {
+      "name": "URL de eventos",
+      "description": "URL pública WebSocket do Bonfire.",
+      "env_variable": "WS_URL",
+      "default_value": "ws://127.0.0.1:14703",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|max:255",
+      "field_type": "text"
+    },
+    {
+      "name": "URL de arquivos",
+      "description": "URL pública do Autumn.",
+      "env_variable": "MEDIA_URL",
+      "default_value": "http://127.0.0.1:14704",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|url|max:255",
+      "field_type": "text"
+    },
+    {
+      "name": "URL do proxy",
+      "description": "URL pública do January.",
+      "env_variable": "PROXY_URL",
+      "default_value": "http://127.0.0.1:14705",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|url|max:255",
+      "field_type": "text"
+    },
+    {
+      "name": "URL do Gifbox",
+      "description": "URL pública do serviço Gifbox.",
+      "env_variable": "GIFBOX_URL",
+      "default_value": "http://127.0.0.1:14706",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|url|max:255",
+      "field_type": "text"
+    },
+    {
+      "name": "Instalar ao iniciar",
+      "description": "1 reinstala dependências; 0 reutiliza o cache.",
+      "env_variable": "INSTALL_ON_START",
+      "default_value": "0",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|in:0,1",
+      "field_type": "text"
+    },
+    {
+      "name": "Atualizar Git ao iniciar",
+      "description": "Mantenha 0 enquanto houver alterações locais pelo VS Code.",
+      "env_variable": "PULL_ON_START",
+      "default_value": "0",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|in:0,1",
+      "field_type": "text"
+    },
+    {
+      "name": "Build no modo preview",
+      "description": "1 refaz o build Vite quando iniciar em preview.",
+      "env_variable": "BUILD_ON_START",
+      "default_value": "1",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|in:0,1",
+      "field_type": "text"
+    }
+  ]
+}
